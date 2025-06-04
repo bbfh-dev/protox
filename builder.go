@@ -72,3 +72,13 @@ func (builder *Builder) ThenFloatDelim(ref *float64, delim byte) *Builder {
 	})
 	return builder
 }
+
+func (builder *Builder) ThenStringMap(value map[string]string, sep, comma, delim byte) *Builder {
+	builder.steps = append(builder.steps, &internal.StringMap{
+		Value: value,
+		Sep:   sep,
+		Comma: comma,
+		Delim: delim,
+	})
+	return builder
+}

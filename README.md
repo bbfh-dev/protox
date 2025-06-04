@@ -19,6 +19,7 @@ type Example struct {
 	Int         int64
 	IntDelim    int64
 	FloatDelim  float64
+	StringMap   map[string]string
 }
 
 func (example *Example) Protox() *protox.Processor {
@@ -30,17 +31,18 @@ func (example *Example) Protox() *protox.Processor {
 		ThenInt(&example.Int).
 		ThenIntDelim(&example.IntDelim, '\x00').
 		ThenFloatDelim(&example.FloatDelim, '\x00').
+		ThenStringMap(example.StringMap, '=', '\x00', '\x00').
 		Build()
 }
 
 func write(buffer *bytes.Buffer) {
 	err := example.Protox().Write(buffer)
-    fmt.Println(buffer.String()) // gabc\x00hi!Hello World!\x009\x05\x00\x00\x00\x00\x00\x0042069\x00420.69\x00
+    fmt.Println(buffer.String()) // "gabc\x00hi!Hello World!\x009\x05\x00\x00\x00\x00\x00\x0042069\x00420.69\x00a=(1)\x00b=(2)\x00c=(3)\x00\x00"
 }
 
 func read(buffer *bytes.Buffer) {
 	instance := &Example{}
     err := instance.Protox().Read(bufio.NewReader(buffer))
-    fmt.Prinln(instance) // &protox_test.Example{Byte:0x67, BytesDelim:[]uint8{0x61, 0x62, 0x63}, String:"hi!", StringDelim:"Hello World!", Int:1337, IntDelim:42069, FloatDelim:420.69}
+    fmt.Prinln(instance) // &protox_test.Example{Byte:0x67, BytesDelim:[]uint8{0x61, 0x62, 0x63}, String:"hi!", StringDelim:"Hello World!", Int:1337, IntDelim:42069, FloatDelim:420.69, StringMap:map[string]string{"a":"(1)", "b":"(2)", "c":"(3)"}}
 }
 ```
