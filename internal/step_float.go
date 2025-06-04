@@ -13,7 +13,8 @@ type FloatDelim struct {
 }
 
 func (step *FloatDelim) Write(writer io.Writer) error {
-	_, err := fmt.Fprintf(writer, "%f%s", *step.Ref, string(step.Delim))
+	str := strconv.FormatFloat(*step.Ref, 'f', -1, 64)
+	_, err := fmt.Fprintf(writer, "%s%s", str, string(step.Delim))
 	return err
 }
 

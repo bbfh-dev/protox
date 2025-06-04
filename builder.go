@@ -26,7 +26,7 @@ func (builder *Builder) ThenByte(ref *byte) *Builder {
 	return builder
 }
 
-func (builder *Builder) ThenBytesDelim(value []byte, delim byte) *Builder {
+func (builder *Builder) ThenBytesDelim(value *[]byte, delim byte) *Builder {
 	builder.steps = append(builder.steps, &internal.ByteDelim{
 		Value: value,
 		Delim: delim,

@@ -15,7 +15,8 @@ type Int struct {
 func (step *Int) Write(writer io.Writer) error {
 	data := make([]byte, 8)
 	binary.LittleEndian.PutUint64(data, uint64(*step.Ref))
-	return nil
+	_, err := writer.Write(data)
+	return err
 }
 
 func (step *Int) Read(reader *bufio.Reader) (err error) {

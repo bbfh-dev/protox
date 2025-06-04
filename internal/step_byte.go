@@ -20,12 +20,12 @@ func (step *Byte) Read(reader *bufio.Reader) (err error) {
 }
 
 type ByteDelim struct {
-	Value []byte
+	Value *[]byte
 	Delim byte
 }
 
 func (step *ByteDelim) Write(writer io.Writer) (err error) {
-	_, err = writer.Write(step.Value)
+	_, err = writer.Write(*step.Value)
 	if err != nil {
 		return err
 	}
