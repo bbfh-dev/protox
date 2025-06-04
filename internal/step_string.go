@@ -40,7 +40,8 @@ func (step *StringDelim) Write(writer io.Writer) (err error) {
 	return err
 }
 
-func (step *StringDelim) Read(reader *bufio.Reader) (err error) {
-	*step.Ref, err = reader.ReadString(step.Delim)
+func (step *StringDelim) Read(reader *bufio.Reader) error {
+	str, err := reader.ReadString(step.Delim)
+	*step.Ref = str[:len(str)-1]
 	return err
 }

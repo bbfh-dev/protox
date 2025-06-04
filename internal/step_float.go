@@ -22,6 +22,6 @@ func (step *FloatDelim) Read(reader *bufio.Reader) error {
 	if err != nil {
 		return err
 	}
-	*step.Ref, err = strconv.ParseFloat(str, 64)
+	*step.Ref, err = strconv.ParseFloat(str[:len(str)-1], 64)
 	return err
 }

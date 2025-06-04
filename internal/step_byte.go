@@ -33,7 +33,8 @@ func (step *ByteDelim) Write(writer io.Writer) (err error) {
 	return err
 }
 
-func (step *ByteDelim) Read(reader *bufio.Reader) (err error) {
-	step.Value, err = reader.ReadBytes(step.Delim)
+func (step *ByteDelim) Read(reader *bufio.Reader) error {
+	slice, err := reader.ReadBytes(step.Delim)
+	*step.Value = slice[:len(slice)-1]
 	return err
 }

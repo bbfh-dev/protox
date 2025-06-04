@@ -43,6 +43,6 @@ func (step *IntDelim) Read(reader *bufio.Reader) (err error) {
 	if err != nil {
 		return err
 	}
-	*step.Ref, err = strconv.ParseInt(str, 10, 64)
+	*step.Ref, err = strconv.ParseInt(str[:len(str)-1], 10, 64)
 	return err
 }
