@@ -54,15 +54,7 @@ func TestRead(test *testing.T) {
 	var buffer bytes.Buffer
 	assert.NilError(test, example.Protox().Write(&buffer))
 
-	instance := &Example{
-		Byte:        0,
-		BytesDelim:  []byte{},
-		String:      "",
-		StringDelim: "",
-		Int:         0,
-		IntDelim:    0,
-		FloatDelim:  0,
-	}
+	instance := &Example{}
 	test.Logf("Before: %#v\n", instance)
 	assert.NilError(test, instance.Protox().Read(bufio.NewReader(&buffer)))
 	test.Logf("After: %#v\n", instance)
