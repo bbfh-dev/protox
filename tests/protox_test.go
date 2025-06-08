@@ -17,6 +17,7 @@ type Example struct {
 	Int         int64
 	IntDelim    int64
 	FloatDelim  float64
+	StringMap   map[string]string
 }
 
 func (example *Example) Protox() *protox.Processor {
@@ -28,6 +29,7 @@ func (example *Example) Protox() *protox.Processor {
 		ThenInt(&example.Int).
 		ThenIntDelim(&example.IntDelim, '\x00').
 		ThenFloatDelim(&example.FloatDelim, '\x00').
+		ThenStringMap(example.StringMap, '=', '\x00', '\x00').
 		Build()
 }
 
@@ -39,9 +41,10 @@ var example = &Example{
 	Int:         1337,
 	IntDelim:    42069,
 	FloatDelim:  420.69,
+	StringMap:   map[string]string{},
 }
 
-var exampleString = "g" + "abc\x00" + "hi!" + "Hello World!\x00" + "9\x05\x00\x00\x00\x00\x00\x00" + "42069\x00" + "420.69\x00"
+var exampleString = "g" + "abc\x00" + "hi!" + "Hello World!\x00" + "9\x05\x00\x00\x00\x00\x00\x00" + "42069\x00" + "420.69\x00\x00"
 
 func TestWrite(test *testing.T) {
 	var buffer bytes.Buffer
@@ -54,7 +57,9 @@ func TestRead(test *testing.T) {
 	var buffer bytes.Buffer
 	assert.NilError(test, example.Protox().Write(&buffer))
 
-	instance := &Example{}
+	instance := &Example{
+		StringMap: map[string]string{},
+	}
 	test.Logf("Before: %#v\n", instance)
 	assert.NilError(test, instance.Protox().Read(bufio.NewReader(&buffer)))
 	test.Logf("After: %#v\n", instance)
@@ -65,4 +70,5 @@ func TestRead(test *testing.T) {
 	assert.DeepEqual(test, instance.Int, example.Int)
 	assert.DeepEqual(test, instance.IntDelim, example.IntDelim)
 	assert.DeepEqual(test, instance.FloatDelim, example.FloatDelim)
+	assert.DeepEqual(test, instance.StringMap, example.StringMap)
 }
