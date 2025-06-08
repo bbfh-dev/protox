@@ -20,6 +20,7 @@ type Example struct {
 	IntDelim    int64
 	FloatDelim  float64
 	StringMap   map[string]string
+	StringArr   []string
 }
 
 func (example *Example) Protox() *protox.Processor {
@@ -32,6 +33,7 @@ func (example *Example) Protox() *protox.Processor {
 		ThenIntDelim(&example.IntDelim, '\x00').
 		ThenFloatDelim(&example.FloatDelim, '\x00').
 		ThenStringMap(example.StringMap, '=', '\x00', '\x00').
+		ThenStringArray(&example.StringArr, ',', ';').
 		Build()
 }
 

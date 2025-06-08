@@ -82,3 +82,12 @@ func (builder *Builder) ThenStringMap(value map[string]string, sep, comma, delim
 	})
 	return builder
 }
+
+func (builder *Builder) ThenStringArray(value *[]string, comma, delim byte) *Builder {
+	builder.steps = append(builder.steps, &internal.StringArray{
+		Value: value,
+		Comma: comma,
+		Delim: delim,
+	})
+	return builder
+}
